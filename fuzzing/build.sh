@@ -6,7 +6,10 @@ export QPDF_BUILD_LIBDIR=$QPDF_SOURCE_TREE/build/libqpdf
 # Build qpdf dependency
 
 cd $QPDF_SOURCE_TREE
-cmake -S . -B build \
+# Configure without custom fuzzing flags
+cmake -S . -B build
+# Build with our flags
+cmake -B build \
      -DOSS_FUZZ=ON \
      -DBUILD_SHARED_LIBS=ON \
      -DUSE_IMPLICIT_CRYPTO=OFF \
