@@ -20,7 +20,7 @@ cmake --build build --parallel --target libqpdf
 # Build pikepdf
 cd "$SRC"/pikepdf
 env QPDF_SOURCE_TREE=$QPDF_SOURCE_TREE QPDF_BUILD_LIBDIR=$QPDF_BUILD_LIBDIR \
-    CC="$CC" CFLAGS="$CFLAGS" CXX="$CXX" CXXFLAGS="$CXXFLAGS" LDSHARED="$CXX -shared" \
+    CC="$CC" CFLAGS="$CFLAGS" CXX="$CXX" CXXFLAGS="$CXXFLAGS" LDSHARED="$LIB_FUZZING_ENGINE $CXX -shared" \
     pip3 install --verbose .
 
 
