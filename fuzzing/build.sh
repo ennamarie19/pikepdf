@@ -4,18 +4,22 @@ export QPDF_SOURCE_TREE="$SRC"/qpdf
 export QPDF_BUILD_LIBDIR=$QPDF_SOURCE_TREE/build/libqpdf
 
 # Build qpdf dependency
+
 cd $QPDF_SOURCE_TREE
-cmake -S . -B build \
-    -DOSS_FUZZ=ON \
-    -DBUILD_SHARED_LIBS=ON \
-    -DCMAKE_BUILD_TYPE=Debug \
-    -DCMAKE_CXX_STANDARD=17 \
-    -DCMAKE_C_COMPILER="$CC" \
-    -DCMAKE_CXX_COMPILER="$CXX" \
-    -DCMAKE_C_FLAGS="$CFLAGS" \
-    -DCMAKE_CXX_FLAGS="$CXXFLAGS" \
-    -DCMAKE_EXE_LINKER_FLAGS="$LIB_FUZZING_ENGINE"
-cmake --build build --parallel --target libqpdf
+./fuzz/oss-fuzz-build
+# cmake -S . -B build \
+#     -DOSS_FUZZ=ON \
+#     -DBUILD_SHARED_LIBS=OFF \
+#     -DCMAKE_BUILD_TYPE=Debug \
+#     -DUSE_IMPLICIT_CRYPTO=OFF \
+#     -DREQUIRE_CRYPTO_NATIVE=ON \
+#     -DCMAKE_CXX_STANDARD=17 \
+#     -DCMAKE_C_COMPILER="$CC" \
+#     -DCMAKE_CXX_COMPILER="$CXX" \
+#     -DCMAKE_C_FLAGS="$CFLAGS" \
+#     -DCMAKE_CXX_FLAGS="$CXXFLAGS" \
+#     -DCMAKE_EXE_LINKER_FLAGS="$LIB_FUZZING_ENGINE"
+# cmake --build build --parallel --target libqpdf
 
 # Build pikepdf
 cd "$SRC"/pikepdf
