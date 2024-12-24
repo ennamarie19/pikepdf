@@ -1,7 +1,7 @@
 # SPDX-FileCopyrightText: 2024 ennamarie19
 # SPDX-License-Identifier: MIT
 export QPDF_SOURCE_TREE="$SRC"/qpdf
-export QPDF_BUILD_LIBDIR=$OUT/src/qpdf/build/libqpdf
+export QPDF_BUILD_LIBDIR=$QPDF_SOURCE_TREE/build/libqpdf
 
 # Build qpdf dependency
 cd $QPDF_SOURCE_TREE
@@ -11,7 +11,7 @@ cmake -S . -B build \
     -DCMAKE_BUILD_TYPE=Debug \
     -DCMAKE_CXX_STANDARD=17 \
     CC="$CC" CXX="$CXX" CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS"
-cmake --build build --parallel --target libpqdf
+cmake --build build --parallel --target libqdf
 
 # Build pikepdf
 cd "$SRC"/pikepdf
