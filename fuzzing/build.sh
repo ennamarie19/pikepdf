@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: MIT
 export QPDF_SOURCE_TREE="$SRC"/qpdf
 export QPDF_BUILD_LIBDIR=$QPDF_SOURCE_TREE/build/libqpdf
-export SANITIZER_DIR=$(python -c "import atheris; print(atheris.path())"
+export SANITIZER_DIR=$(python -c "import atheris; print(atheris.path())")
 
 # Build qpdf dependency
 cd $QPDF_SOURCE_TREE
@@ -11,7 +11,10 @@ cmake -S . -B build \
     -DBUILD_SHARED_LIBS=ON \
     -DCMAKE_BUILD_TYPE=Debug \
     -DCMAKE_CXX_STANDARD=17 \
-    CC="$CC" CXX="$CXX" CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS"
+    -DCMAKE_C_COMPILER="$CC" \
+    -DCMAKE_CXX_COMPILER="$CXX" \
+    -DCMAKE_C_FLAGS="$CFLAGS" \
+    -DCMAKE_CXX_FLAGS="$CXXFLAGS"
 cmake --build build --parallel --target libqpdf
 
 # Build pikepdf
@@ -33,7 +36,7 @@ for fuzzer in $(find fuzzing -name '*_fuzzer.py');do
     echo "#!/bin/sh
     # LLVMFuzzerTestOneInput for fuzzer detection.
     this_dir=\$(dirname \"\$0\")
-    LD_PRELOAD=\$SANITIZER_DIR/asan_with_fuzzer.so \
+    LD_PRELOAD=$SANITIZER_DIR/asan_with_fuzzer.so \
     ASAN_OPTIONS=\$ASAN_OPTIONS:symbolize=1:external_symbolizer_path=\$this_dir/llvm-symbolizer:detect_leaks=0 \
     \$this_dir/$fuzzer_package \$@" > $OUT/$fuzzer_basename
 
