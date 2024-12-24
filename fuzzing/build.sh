@@ -11,7 +11,7 @@ cmake -S . -B build \
     -DCMAKE_BUILD_TYPE=Debug \
     -DCMAKE_CXX_STANDARD=17 \
     CC="$CC" CXX="$CXX" CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS"
-cmake --build build --parallel --target libqdf
+cmake --build build --parallel --target libqpdf
 
 # Build pikepdf
 cd "$SRC"/pikepdf
