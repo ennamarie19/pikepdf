@@ -15,9 +15,21 @@ env LD_LIBRARY_PATH=$QPDF_BUILD_LIBDIR QPDF_SOURCE_TREE=$QPDF_SOURCE_TREE QPDF_B
 
 # Build fuzzers in $OUT
 for fuzzer in $(find fuzzing -name '*_fuzzer.py');do
-    ASAN_OPTIONS=detect_leaks=0 compile_python_fuzzer "$fuzzer" \
+    fuzzer_basename=$(basename -s .py $fuzzer)
+    fuzzer_package=${fuzzer_basename}.pkg
+
+    pyinstaller --distpath $OUT --onefile --name $fuzzer_package $fuzzer \
       --add-binary="$QPDF_BUILD_LIBDIR/libqpdf.so.29:." \
       --add-binary="/lib/x86_64-linux-gnu/libz.so.1:." \
       --add-binary="/lib/x86_64-linux-gnu/libjpeg.so.8:."
+
+    echo "#!/bin/sh
+    # LLVMFuzzerTestOneInput for fuzzer detection.
+    this_dir=\$(dirname \"\$0\")
+    LD_PRELOAD=\$(python -c \"import atheris; print(atheris.path())\")/asan_with_fuzzer.so \
+    ASAN_OPTIONS=\$ASAN_OPTIONS:symbolize=1:external_symbolizer_path=\$this_dir/llvm-symbolizer:detect_leaks=0 \
+    \$this_dir/$fuzzer_package \$@" > $OUT/$fuzzer_basename
+
+    chmod +x $OUT/$fuzzer_basename
 done
 zip -q $OUT/pikepdf_fuzzer_seed_corpus.zip $SRC/pikepdf/fuzzing/corpus/*
