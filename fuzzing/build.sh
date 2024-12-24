@@ -15,7 +15,7 @@ env LD_LIBRARY_PATH=$QPDF_BUILD_LIBDIR QPDF_SOURCE_TREE=$QPDF_SOURCE_TREE QPDF_B
 
 # Build fuzzers in $OUT
 for fuzzer in $(find fuzzing -name '*_fuzzer.py');do
-  LD_PRELOAD=$OUT/sanitizer_with_fuzzer.so ASAN_OPTIONS=detect_leaks=0 compile_python_fuzzer "$fuzzer" \
+    ASAN_OPTIONS=detect_leaks=0 compile_python_fuzzer "$fuzzer" \
       --add-binary="$QPDF_BUILD_LIBDIR/libqpdf.so.29:." \
       --add-binary="/lib/x86_64-linux-gnu/libz.so.1:." \
       --add-binary="/lib/x86_64-linux-gnu/libjpeg.so.8:."
