@@ -13,7 +13,8 @@ cmake -S . -B build \
     -DCMAKE_C_COMPILER="$CC" \
     -DCMAKE_CXX_COMPILER="$CXX" \
     -DCMAKE_C_FLAGS="$CFLAGS" \
-    -DCMAKE_CXX_FLAGS="$CXXFLAGS"
+    -DCMAKE_CXX_FLAGS="$CXXFLAGS" \
+    -DCMAKE_SHARED_LINKER_FLAGS="$CXXFLAGS"
 cmake --build build --parallel --target libqpdf
 
 # Build pikepdf
