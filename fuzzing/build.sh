@@ -2,6 +2,7 @@
 # SPDX-License-Identifier: MIT
 export QPDF_SOURCE_TREE="$SRC"/qpdf
 export QPDF_BUILD_LIBDIR=$QPDF_SOURCE_TREE/build/libqpdf
+export QPDF_BUILD_LIBDIR=$OUT/src/qpdf/build/libqpdf
 
 # Build qpdf dependency
 
