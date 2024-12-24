@@ -5,7 +5,13 @@ export QPDF_BUILD_LIBDIR=$OUT/src/qpdf/build/libqpdf
 
 # Build qpdf dependency
 cd $QPDF_SOURCE_TREE
-./fuzz/oss-fuzz-build
+cmake -S . -B build \
+    -DOSS_FUZZ=ON \
+    -DBUILD_SHARED_LIBS=ON \
+    -DCMAKE_BUILD_TYPE=Debug \
+    -DCMAKE_CXX_STANDARD=17 \
+    CC="$CC" CXX="$CXX" CFLAGS="$CFLAGS" CXXFLAGS="$CXXFLAGS"
+cmake --build build --parallel --target libpqdf
 
 # Build pikepdf
 cd "$SRC"/pikepdf
