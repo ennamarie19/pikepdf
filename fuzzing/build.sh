@@ -2,7 +2,6 @@
 # SPDX-License-Identifier: MIT
 export QPDF_SOURCE_TREE="$SRC"/qpdf
 export QPDF_BUILD_LIBDIR=$QPDF_SOURCE_TREE/build/libqpdf
-export SANITIZER_DIR=$(python -c "import atheris; print(atheris.path())")
 
 # Build qpdf dependency
 cd $QPDF_SOURCE_TREE
@@ -36,7 +35,7 @@ for fuzzer in $(find fuzzing -name '*_fuzzer.py');do
     echo "#!/bin/sh
     # LLVMFuzzerTestOneInput for fuzzer detection.
     this_dir=\$(dirname \"\$0\")
-    LD_PRELOAD=$SANITIZER_DIR/asan_with_fuzzer.so \
+    LD_PRELOAD=\$this_dir/sanitizer_with_fuzzer.so \
     ASAN_OPTIONS=\$ASAN_OPTIONS:symbolize=1:external_symbolizer_path=\$this_dir/llvm-symbolizer:detect_leaks=0 \
     \$this_dir/$fuzzer_package \$@" > $OUT/$fuzzer_basename
 
